@@ -1818,7 +1818,7 @@ class ImageTools():
         
         pass
     
-    @plt.style.context('spaceKLIP.sk_style')
+    # @plt.style.context('spaceKLIP.sk_style')
     def find_nircam_centers(self,
                             data0,
                             key,
@@ -1983,7 +1983,7 @@ class ImageTools():
         # Return star position.
         return xc, yc, xshift, yshift
     
-    @plt.style.context('spaceKLIP.sk_style')
+    # @plt.style.context('spaceKLIP.sk_style')
     def align_frames(self,
                      method='fourier',
                      shift_method='fourier',

@@ -404,7 +404,7 @@ class OneOverfStep(Step):
 
         return np.asarray(model_arr)
 
-    @plt.style.context('webbpsf_ext.wext_style')
+    # @plt.style.context('webbpsf_ext.wext_style')
     def quick_plot(self, image, mask, model, im_diff=None):
 
         fig, axes = plt.subplots(2,2, figsize=(8,8), sharex=True, sharey=True)
