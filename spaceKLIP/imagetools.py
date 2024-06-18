@@ -1596,7 +1596,7 @@ class ImageTools():
         pass
     
     def recenter_frames(self,
-                        method='fourier',
+                        shift_method='fourier',
                         subpix_first_sci_only=False,
                         spectral_type='G2V',
                         shft_exp=1,
@@ -1611,7 +1611,7 @@ class ImageTools():
         
         Parameters
         ----------
-        method : 'fourier' or 'spline' (not recommended), optional
+        shift_method : 'fourier' or 'spline', optional
             Method for shifting the frames. The default is 'fourier'.
         subpix_first_sci_only : bool, optional
             By default, all frames will be recentered to subpixel precision. If
@@ -1702,8 +1702,8 @@ class ImageTools():
                             # Apply the same shift to all SCI and REF frames.
                             shifts += [np.array([-(xc - data.shape[-1]//2), -(yc - data.shape[-2]//2)])]
                             maskoffs_temp += [np.array([xshift, yshift])]
-                            data[k] = ut.imshift(data[k], [shifts[k][0], shifts[k][1]], method=method, kwargs=kwargs)
-                            erro[k] = ut.imshift(erro[k], [shifts[k][0], shifts[k][1]], method=method, kwargs=kwargs)
+                            data[k] = ut.imshift(data[k], [shifts[k][0], shifts[k][1]], method=shift_method, kwargs=kwargs)
+                            erro[k] = ut.imshift(erro[k], [shifts[k][0], shifts[k][1]], method=shift_method, kwargs=kwargs)
                         if mask is not None:
                             # mask = ut.imshift(mask, [shifts[k][0], shifts[k][1]], method=method, kwargs=kwargs)
                             mask = spline_shift(mask, [shifts[k][1], shifts[k][0]], order=0, mode='constant', cval=np.nanmedian(mask))
@@ -1736,8 +1736,8 @@ class ImageTools():
                                 pp = core.determine_origin(data[k], algo='BCEN')
                                 shifts += [np.array([-(pp[0] - data.shape[-1]//2), -(pp[1] - data.shape[-2]//2)])]
                                 maskoffs_temp += [np.array([0., 0.])]
-                                data[k] = ut.imshift(data[k], [shifts[k][0], shifts[k][1]], method=method, kwargs=kwargs)
-                                erro[k] = ut.imshift(erro[k], [shifts[k][0], shifts[k][1]], method=method, kwargs=kwargs)
+                                data[k] = ut.imshift(data[k], [shifts[k][0], shifts[k][1]], method=shift_method, kwargs=kwargs)
+                                erro[k] = ut.imshift(erro[k], [shifts[k][0], shifts[k][1]], method=shift_method, kwargs=kwargs)
                             else:
                                 shifts += [np.array([0., 0.])]
                                 maskoffs_temp += [np.array([0., 0.])]
@@ -1767,11 +1767,11 @@ class ImageTools():
                         p0 = np.array([0., 0.])
                         pp = minimize(ut.recenterlsq,
                                       p0,
-                                      args=(data[k], method, kwargs))['x']
+                                      args=(data[k], shift_method, kwargs))['x']
                         shifts += [np.array([pp[0], pp[1]])]
                         maskoffs_temp += [np.array([0., 0.])]
-                        data[k] = ut.imshift(data[k], [shifts[k][0], shifts[k][1]], method=method, kwargs=kwargs)
-                        erro[k] = ut.imshift(erro[k], [shifts[k][0], shifts[k][1]], method=method, kwargs=kwargs)
+                        data[k] = ut.imshift(data[k], [shifts[k][0], shifts[k][1]], method=shift_method, kwargs=kwargs)
+                        erro[k] = ut.imshift(erro[k], [shifts[k][0], shifts[k][1]], method=shift_method, kwargs=kwargs)
                         
                         # Recenter TA frames to integer pixel precision by
                         # rolling the image.
@@ -1986,6 +1986,7 @@ class ImageTools():
     @plt.style.context('spaceKLIP.sk_style')
     def align_frames(self,
                      method='fourier',
+                     shift_method='fourier',
                      align_algo='leastsq',
                      mask_override=None,
                      msk_shp=8,
@@ -1998,6 +1999,8 @@ class ImageTools():
         Parameters
         ----------
         method : 'fourier' or 'spline' (not recommended), optional
+            Method for cross correlating the frames. The default is 'fourier'.
+        shift_method : 'fourier' or 'spline', optional
             Method for shifting the frames. The default is 'fourier'.
         align_algo : 'leastsq' or 'header'
             Algorithm to determine the alignment offsets. Default is 'leastsq',
@@ -2142,8 +2145,8 @@ class ImageTools():
                     # using defined method. 
                     shifts += [np.array([pp[0], pp[1], pp[2]])]
                     if j != ww_sci[0] or k != 0:
-                        data[k] = ut.imshift(data[k], [shifts[k][0], shifts[k][1]], method=method, kwargs=kwargs)
-                        erro[k] = ut.imshift(erro[k], [shifts[k][0], shifts[k][1]], method=method, kwargs=kwargs)
+                        data[k] = ut.imshift(data[k], [shifts[k][0], shifts[k][1]], method=shift_method, kwargs=kwargs)
+                        erro[k] = ut.imshift(erro[k], [shifts[k][0], shifts[k][1]], method=shift_method, kwargs=kwargs)
                 shifts = np.array(shifts)
                 if mask is not None:
                     if j != ww_sci[0]:
