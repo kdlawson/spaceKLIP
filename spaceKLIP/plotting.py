@@ -262,7 +262,7 @@ def display_coron_image(filename):
     if is_pyklip:
         bpmask[np.isnan(image)] = 1
     else:
-        bpmask[(model.dq[0] & 1) == True] = 1
+        bpmask[(dq & 1) == True] = 1
         
     
     # Set up image stretch
@@ -376,7 +376,7 @@ def display_coron_dataset(database, restrict_to=None, save_filename=None, stage3
         for key in database.red:
             if (restrict_to is None) or (restrict_to in key):
                 redtable = database.red[key]
-                for typestr in ['PYKLIP','STAGE3']:
+                for typestr in ['PYKLIP','CORON3']:
                     filenames = redtable[redtable['TYPE'] == typestr]['FITSFILE']
                     
                     for fn in filenames:

@@ -646,12 +646,10 @@ class Database():
         for i in range(Ndatapaths):
             hdul = pyfits.open(datapaths[i])
             head = hdul[0].header
-            if datapaths[i].endswith('i2d.fits'):
-                TYPE += ['CORON3']
-            elif datapaths[i].endswith('KLmodes-all.fits'):
+            if datapaths[i].endswith('KLmodes-all.fits'):
                 TYPE += ['PYKLIP']
             else:
-                raise UserWarning('File must have one of the following endings: i2d.fits, KLmodes-all.fits')
+                TYPE += ['CORON3']
             DATAMODL += ['STAGE3']
             TELESCOP += [head.get('TELESCOP', 'JWST')]
             TARGPROP += [head.get('TARGPROP', 'UNKNOWN')]
