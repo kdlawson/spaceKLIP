@@ -187,7 +187,8 @@ class AnalysisTools():
                 offsetpsf = get_offsetpsf(self.database.obs[key])
                 fstar = fzero[filt] / 10.**(mstar[filt] / 2.5) / 1e6 * np.max(offsetpsf)  # MJy
                 # Get PSF subtraction strategy used, for use in plot labels below.
-                psfsub_strategy = f"{head_pri['MODE']} with {head_pri['ANNULI']} annuli." if head_pri['ANNULI']>1 else head_pri['MODE']
+                head_annuli, head_mode = head_sci.get('ANNULI', np.nan), head_sci.get('MODE', None)
+                psfsub_strategy = f"{head_mode} with {head_annuli} annuli." if head_annuli>1 else head_mode
 
                 # Set the inner and outer working angle and compute the
                 # resolution element. Account for possible blurring.
@@ -206,7 +207,7 @@ class AnalysisTools():
                 
                 # Get the star position.
                 if overwrite_crpix is None:
-                    center = (head_pri['CRPIX1'] - 1., head_pri['CRPIX2'] - 1.)  # pix (0-indexed)
+                    center = (head_sci['CRPIX1'] - 1., head_sci['CRPIX2'] - 1.)  # pix (0-indexed)
                 else:
                     center = (overwrite_crpix[0] - 1., overwrite_crpix[1] - 1.)  # pix (0-indexed)
                 
